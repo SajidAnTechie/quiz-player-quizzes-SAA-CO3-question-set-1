@@ -1,0 +1,137 @@
+<svg viewBox="0 0 800 600"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#232F3E" text-anchor="middle">
+    EBS Volume Types - Performance Comparison
+  </text>
+
+  <!-- Grid background -->
+  <g opacity="0.1">
+    <line x1="150" y1="80" x2="750" y2="80" stroke="#232F3E" stroke-width="1"/>
+    <line x1="150" y1="180" x2="750" y2="180" stroke="#232F3E" stroke-width="1"/>
+    <line x1="150" y1="280" x2="750" y2="280" stroke="#232F3E" stroke-width="1"/>
+    <line x1="150" y1="380" x2="750" y2="380" stroke="#232F3E" stroke-width="1"/>
+    <line x1="150" y1="480" x2="750" y2="480" stroke="#232F3E" stroke-width="1"/>
+  </g>
+
+  <!-- Y-axis labels -->
+  <text x="130" y="85" font-family="Arial, sans-serif" font-size="12" fill="#232F3E" text-anchor="end">High</text>
+  <text x="130" y="285" font-family="Arial, sans-serif" font-size="12" fill="#232F3E" text-anchor="end">Medium</text>
+  <text x="130" y="485" font-family="Arial, sans-serif" font-size="12" fill="#232F3E" text-anchor="end">Low</text>
+
+  <!-- Y-axis title -->
+  <text x="30" y="285" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#232F3E" text-anchor="middle" transform="rotate(-90, 30, 285)">
+    Performance / Cost
+  </text>
+
+  <!-- Workload quadrants with clickable hotspots -->
+
+  <!-- Workload A - Top Left (High Performance, SSD) -->
+  <g id="workload-a">
+    <rect x="150" y="80" width="250" height="180" fill="#E8F4F8" stroke="#146EB4" stroke-width="2" rx="5"/>
+    <text x="275" y="110" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#146EB4" text-anchor="middle">
+      Workload A
+    </text>
+    <text x="275" y="135" font-family="Arial, sans-serif" font-size="11" fill="#232F3E" text-anchor="middle">
+      Boot volumes &amp;
+    </text>
+    <text x="275" y="155" font-family="Arial, sans-serif" font-size="11" fill="#232F3E" text-anchor="middle">
+      small databases
+    </text>
+    <text x="275" y="180" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#FF9900" text-anchor="middle">
+      16,000 IOPS
+    </text>
+    <text x="275" y="200" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#FF9900" text-anchor="middle">
+      1,000 MB/s
+    </text>
+    <circle cx="275" cy="230" r="20" fill="transparent" stroke="#FF0000" stroke-width="3" stroke-dasharray="5,5"/>
+    <text x="275" y="237" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FF0000" text-anchor="middle">?</text>
+  </g>
+
+  <!-- Workload B - Top Right (Extreme Performance, SSD) -->
+  <g id="workload-b">
+    <rect x="450" y="80" width="300" height="180" fill="#FFE8E8" stroke="#C41E3A" stroke-width="2" rx="5"/>
+    <text x="600" y="110" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#C41E3A" text-anchor="middle">
+      Workload B
+    </text>
+    <text x="600" y="135" font-family="Arial, sans-serif" font-size="11" fill="#232F3E" text-anchor="middle">
+      I/O-intensive NoSQL DB
+    </text>
+    <text x="600" y="155" font-family="Arial, sans-serif" font-size="11" fill="#232F3E" text-anchor="middle">
+      Sub-ms latency required
+    </text>
+    <text x="600" y="180" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#C41E3A" text-anchor="middle">
+      64,000 IOPS sustained
+    </text>
+    <text x="600" y="200" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#C41E3A" text-anchor="middle">
+      Mission-critical
+    </text>
+    <circle cx="600" cy="230" r="20" fill="transparent" stroke="#FF0000" stroke-width="3" stroke-dasharray="5,5"/>
+    <text x="600" y="237" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FF0000" text-anchor="middle">?</text>
+  </g>
+
+  <!-- Workload C - Bottom Left (Throughput, HDD) -->
+  <g id="workload-c">
+    <rect x="150" y="300" width="250" height="180" fill="#E8F4E8" stroke="#2D882D" stroke-width="2" rx="5"/>
+    <text x="275" y="330" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2D882D" text-anchor="middle">
+      Workload C
+    </text>
+    <text x="275" y="355" font-family="Arial, sans-serif" font-size="11" fill="#232F3E" text-anchor="middle">
+      Big data analytics
+    </text>
+    <text x="275" y="375" font-family="Arial, sans-serif" font-size="11" fill="#232F3E" text-anchor="middle">
+      Sequential reads
+    </text>
+    <text x="275" y="400" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2D882D" text-anchor="middle">
+      500 MB/s throughput
+    </text>
+    <text x="275" y="420" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2D882D" text-anchor="middle">
+      Lowest cost HDD
+    </text>
+    <circle cx="275" cy="450" r="20" fill="transparent" stroke="#FF0000" stroke-width="3" stroke-dasharray="5,5"/>
+    <text x="275" y="457" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FF0000" text-anchor="middle">?</text>
+  </g>
+
+  <!-- Workload D - Bottom Right (Cold Storage, HDD) -->
+  <g id="workload-d">
+    <rect x="450" y="300" width="300" height="180" fill="#F0F0F0" stroke="#666666" stroke-width="2" rx="5"/>
+    <text x="600" y="330" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#666666" text-anchor="middle">
+      Workload D
+    </text>
+    <text x="600" y="355" font-family="Arial, sans-serif" font-size="11" fill="#232F3E" text-anchor="middle">
+      Infrequently accessed
+    </text>
+    <text x="600" y="375" font-family="Arial, sans-serif" font-size="11" fill="#232F3E" text-anchor="middle">
+      log archives
+    </text>
+    <text x="600" y="400" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#666666" text-anchor="middle">
+      Low-cost storage
+    </text>
+    <text x="600" y="420" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#666666" text-anchor="middle">
+      Occasional access
+    </text>
+    <circle cx="600" cy="450" r="20" fill="transparent" stroke="#FF0000" stroke-width="3" stroke-dasharray="5,5"/>
+    <text x="600" y="457" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FF0000" text-anchor="middle">?</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(150, 520)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#232F3E">
+      Available Volume Types:
+    </text>
+    <text x="0" y="25" font-family="Arial, sans-serif" font-size="12" fill="#232F3E">
+      • gp3 (General Purpose SSD) • gp2 (Previous Gen SSD)
+    </text>
+    <text x="0" y="45" font-family="Arial, sans-serif" font-size="12" fill="#232F3E">
+      • io2 Block Express (Highest Performance) • io2 / io1 (Provisioned IOPS SSD)
+    </text>
+    <text x="0" y="65" font-family="Arial, sans-serif" font-size="12" fill="#232F3E">
+      • st1 (Throughput Optimized HDD) • sc1 (Cold HDD)
+    </text>
+  </g>
+
+  <!-- Instructions -->
+  <text x="400" y="560" font-family="Arial, sans-serif" font-size="11" fill="#666666" text-anchor="middle" font-style="italic">
+    Click on each workload to select the most appropriate EBS volume type
+  </text>
+</svg>

@@ -1,0 +1,17 @@
+{
+    "id": "case_study_voltedge_media",
+    "tabs": [
+        {
+            "title": "Company Overview",
+            "content": "**VoltEdge Media** is a rapidly growing video streaming platform serving 15 million subscribers across North America, Europe, and Asia. The company currently operates on-premises data centers in Virginia and Frankfurt, hosting a collection of over 50,000 video assets totaling 800 TB of content.\n\nThe platform experiences highly variable traffic patterns, with peak usage during evening hours in each region and during major content releases. Current infrastructure struggles with scaling during these peaks, and the company has experienced several outages due to capacity constraints.\n\nVoltEdge Media is planning a comprehensive migration to AWS to improve scalability, reduce operational overhead, and expand to additional geographic regions. The company's engineering team has limited AWS experience but strong Linux and networking backgrounds."
+        },
+        {
+            "title": "Current Environment",
+            "content": "**Infrastructure:**\n- 120 physical servers running video transcoding workloads\n- 40 servers hosting the web application tier (Node.js)\n- 8 PostgreSQL database servers with primary-replica configuration\n- Dedicated storage arrays for video content\n- Hardware load balancers and firewalls\n\n**Application Architecture:**\n- Monolithic web application with user authentication, content catalog, and streaming APIs\n- Transcoding pipeline that converts uploaded content into multiple formats and resolutions\n- CDN provider for content delivery (third-party service)\n- Separate admin portal for content management\n\n**Traffic Patterns:**\n- Average: 2,000 requests/second\n- Peak: 12,000 requests/second\n- 80% of traffic is video streaming; 20% is API/web requests"
+        },
+        {
+            "title": "Requirements",
+            "content": "**Technical Requirements:**\n- Migrate all video content to AWS and ensure low-latency access globally\n- Implement auto-scaling for compute resources to handle variable traffic\n- Achieve sub-200ms latency for content delivery in all supported regions\n- Maintain database read performance during peak traffic periods\n- Support multi-region deployment with automatic failover capability\n- Enable development and staging environments that mirror production\n\n**Security Requirements:**\n- Encrypt all data at rest and in transit\n- Implement least-privilege access for all AWS resources\n- Enable cross-account access for the security team to audit infrastructure\n- Protect against DDoS attacks and common web exploits\n- Maintain audit logs of all infrastructure changes and access attempts\n\n**Business Requirements:**\n- Minimize downtime during migration (target: < 4 hours total)\n- Reduce infrastructure operational costs by 30%\n- Enable faster time-to-market for new features (current: 6 weeks; target: 2 weeks)\n- Support expansion to 3 additional geographic regions within 12 months"
+        }
+    ]
+}

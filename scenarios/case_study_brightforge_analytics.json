@@ -1,0 +1,17 @@
+{
+    "id": "case_study_brightforge_analytics",
+    "tabs": [
+        {
+            "title": "Company Overview",
+            "content": "**BrightForge Analytics** is a SaaS company providing real-time business intelligence and data visualization tools to enterprise customers. The platform processes over 50 million data points daily from customer systems, generating interactive dashboards and automated reports.\n\nFounded three years ago, BrightForge has grown from 20 customers to over 400 enterprise clients, including Fortune 500 companies in retail, healthcare, and financial services. The platform is currently hosted entirely in AWS US-East-1.\n\nRecent growth has exposed scalability challenges, particularly during end-of-quarter periods when customers perform extensive data analysis. The company is experiencing increased customer complaints about dashboard load times and occasional service interruptions."
+        },
+        {
+            "title": "Current Architecture",
+            "content": "**Application Stack:**\n- React frontend hosted on Amazon S3 + CloudFront\n- API layer: Node.js microservices running on EC2 t3.xlarge instances behind an Application Load Balancer\n- Data processing: Python ETL jobs running on EC2 scheduled via cron\n- Database: Amazon RDS PostgreSQL (db.m5.4xlarge) - single instance\n- Caching: Redis cluster on EC2 instances\n- Message queue: Amazon SQS for async processing\n\n**Data Flow:**\n1. Customers send data via REST API or S3 uploads\n2. Data is validated and queued in SQS\n3. ETL workers process data and store in PostgreSQL\n4. Dashboard queries fetch aggregated data from database\n5. Results are cached in Redis for 15 minutes\n\n**Performance Metrics:**\n- API response time: P95 = 800ms (target: 500ms)\n- Dashboard load time: P95 = 4.2 seconds (target: 2 seconds)\n- Database CPU utilization: averages 65%, peaks at 92% during busy periods\n- Monthly data ingestion: 1.5 billion records"
+        },
+        {
+            "title": "Requirements",
+            "content": "**Technical Requirements:**\n- Scale API and processing infrastructure to handle 5x current load\n- Reduce dashboard query response times by 50%\n- Implement database read scaling to support growing customer base\n- Automate deployment pipeline from commit to production in under 15 minutes\n- Ensure zero data loss during system failures\n- Support customer data isolation and tenant-specific encryption\n\n**Compliance Requirements:**\n- SOC 2 Type II compliance (annual audit)\n- HIPAA compliance for healthcare customers\n- Data residency: customer data must remain in their chosen region\n- Encryption of all sensitive data at rest using customer-managed keys\n- Maintain detailed audit trail of all data access for 7 years\n- Implement automated backup strategy with point-in-time recovery capability\n\n**Business Requirements:**\n- Maintain 99.9% uptime SLA for all customers\n- Support multi-region deployment (currently evaluating EU and Asia Pacific)\n- Reduce infrastructure costs without compromising performance\n- Enable real-time data processing (current lag: 5-10 minutes; target: < 30 seconds)"
+        }
+    ]
+}

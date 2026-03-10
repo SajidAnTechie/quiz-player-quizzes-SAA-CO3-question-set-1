@@ -1,0 +1,30 @@
+{
+    "id": "saa-c03-brightforge-rds-read-replicas",
+    "type": "multi",
+    "question": "BrightForge Analytics needs to reduce dashboard query response times by 50% and scale database read capacity. Their RDS PostgreSQL database currently peaks at 92% CPU during busy periods. Which TWO solutions will effectively address the read scaling requirement? (Choose two.)",
+    "caseStudy": "scenarios/case_study_brightforge_analytics.json",
+    "options": [
+        {
+            "text": "Create multiple RDS read replicas in the same region and configure the application to distribute read queries across replicas using reader endpoints",
+            "correct": true
+        },
+        {
+            "text": "Upgrade to Amazon Aurora PostgreSQL and utilize the cluster reader endpoint that automatically load balances across up to 15 Aurora read replicas",
+            "correct": true
+        },
+        {
+            "text": "Enable RDS Performance Insights and create additional indexes on frequently queried tables to improve query execution times",
+            "correct": false
+        },
+        {
+            "text": "Increase the RDS instance size from db.m5.4xlarge to db.m5.8xlarge to provide more CPU and memory for query processing",
+            "correct": false
+        },
+        {
+            "text": "Configure RDS Multi-AZ deployment to distribute read traffic between primary and standby instances",
+            "correct": false
+        }
+    ],
+    "explanation": "**RDS read replicas and Aurora PostgreSQL migration** both provide effective read scaling:\n\n**Option A (RDS Read Replicas):**\n- **Read scaling**: Each read replica is a fully functional copy of the database that can handle SELECT queries\n- **Multiple replicas**: PostgreSQL supports up to 5 read replicas per primary instance\n- **Offload primary**: Directing dashboard queries and analytics workload to replicas reduces load on the primary instance\n- **Application-level routing**: The application can use connection pooling and routing logic to distribute queries across replicas\n- **Asynchronous replication**: Provides eventual consistency which is acceptable for dashboard use cases\n- **Cost-effective**: Can add replica capacity incrementally as needed\n\n**Option B (Aurora PostgreSQL):**\n- **Superior read scaling**: Supports up to 15 read replicas vs. 5 for standard RDS PostgreSQL\n- **Automatic load balancing**: Aurora's reader endpoint automatically distributes connections across available replicas\n- **Faster replication**: Typical replication lag is less than 100ms compared to seconds for RDS read replicas\n- **Shared storage**: All replicas read from the same underlying storage, ensuring better consistency\n- **Auto-scaling replicas**: Can automatically add/remove replicas based on CPU or connection metrics\n- **Better performance**: Aurora's architecture is optimized for cloud and typically provides better performance than standard PostgreSQL\n- **Easier management**: Automatic failover, automated backups, and simplified replica management\n\n**Both solutions directly address the requirements:**\n- Reduce dashboard query response times by offloading read traffic from the primary instance\n- Scale read capacity to handle the growing customer base\n- Reduce the 92% CPU peak by distributing load across multiple database instances\n\n**Why not the other options:**\n\n- **Option C (Performance Insights and indexing)**: While Performance Insights is an excellent diagnostic tool and proper indexing improves query performance, these optimizations alone don't provide horizontal read scaling. They help individual queries run faster but don't add read capacity to handle more concurrent queries. The question specifically asks about scaling read capacity, not query optimization.\n\n- **Option D (Vertical scaling to larger instance)**: Increasing instance size provides more resources but doesn't scale horizontally. This has limits - you can only scale up so far before hitting maximum instance sizes. It's also more expensive and doesn't provide the same level of fault tolerance as distributing load across multiple instances. Vertical scaling alone doesn't meet the requirement to \"scale database read capacity\" - it just delays the scaling problem.\n\n- **Option E (Multi-AZ deployment)**: Multi-AZ is for high availability and disaster recovery, not for read scaling. The standby instance in Multi-AZ is synchronized but **not accessible for read queries** - it only becomes active during failover. This is a common misconception. Multi-AZ uses synchronous replication to a standby that cannot serve traffic.",
+    "category": "Domain 3: Design High-Performing Architectures"
+}

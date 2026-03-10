@@ -1,0 +1,67 @@
+{
+    "id": "saa-c03-heliopay-vpc-security",
+    "type": "hotspot-dropdown",
+    "question": "HelioPay Financial is designing their VPC security architecture to meet PCI DSS compliance requirements. The architecture has multiple tiers with different security needs. For each scenario below, select the MOST appropriate security control.",
+    "caseStudy": "scenarios/case_study_heliopay_financial.json",
+    "image": "assets/images/heliopay_vpc_security_architecture.svg",
+    "dropdowns": [
+        {
+            "label": "Scenario 1: The public-facing API in public subnets needs to accept HTTPS traffic from the internet while blocking all other inbound traffic.",
+            "position": {
+                "x": 55,
+                "y": 28
+            },
+            "options": [
+                "Security Group: Allow inbound TCP 443 from 0.0.0.0/0",
+                "NACL: Allow inbound TCP 443 from 0.0.0.0/0, deny all other traffic",
+                "WAF WebACL: Rate limiting + geographic restrictions",
+                "Security Group: Allow all traffic from VPC CIDR"
+            ],
+            "correctIndex": 0
+        },
+        {
+            "label": "Scenario 2: EC2 instances in private subnets hosting the payment processing engine should only accept traffic from the ALB and should not be directly accessible from the internet.",
+            "position": {
+                "x": 55,
+                "y": 48
+            },
+            "options": [
+                "Security Group: Allow inbound traffic only from the ALB security group",
+                "NACL: Deny all traffic from internet gateway",
+                "Route table: Remove route to internet gateway",
+                "Security Group: Allow inbound traffic from VPC CIDR only"
+            ],
+            "correctIndex": 0
+        },
+        {
+            "label": "Scenario 3: The RDS database in database subnets must only be accessible from the payment processing EC2 instances and should reject all other connections.",
+            "position": {
+                "x": 55,
+                "y": 68
+            },
+            "options": [
+                "NACL: Allow traffic only from private subnet CIDR ranges",
+                "Security Group: Allow inbound TCP 5432 from payment processing security group only",
+                "IAM database authentication with policy restricting access",
+                "VPC endpoint policy restricting database access"
+            ],
+            "correctIndex": 1
+        },
+        {
+            "label": "Scenario 4: An additional layer of defense should be implemented at the subnet level to provide protection even if security group rules are misconfigured.",
+            "position": {
+                "x": 55,
+                "y": 88
+            },
+            "options": [
+                "Configure NACLs with explicit allow/deny rules for each subnet tier",
+                "Enable VPC Flow Logs for traffic monitoring",
+                "Implement AWS Network Firewall for deep packet inspection",
+                "Use AWS PrivateLink for all internal service communication"
+            ],
+            "correctIndex": 0
+        }
+    ],
+    "explanation": "**VPC security architecture for PCI DSS compliance requires defense-in-depth:**\n\n**Scenario 1: Public-facing API security**\n- **Security Groups are stateful** and best suited for instance-level access control\n- Allowing TCP 443 from `0.0.0.0/0` permits HTTPS from any source (required for public API)\n- Security Groups have implicit deny - only explicitly allowed traffic is permitted\n- This can be combined with WAF for application-layer protection, but the base requirement is security group rules\n\n**Scenario 2: Private subnet instance protection**\n- **Referencing the ALB security group** creates a dynamic security boundary\n- As ALB instances are added/removed, the security group reference automatically updates\n- This implements **microsegmentation** - instances only accept traffic from authorized sources\n- No need for IP address management or CIDR calculations\n- Even if instances somehow get public IPs, the security group prevents direct access\n\n**Scenario 3: Database access control**\n- **Security group with source group reference** provides the most precise control\n- Only EC2 instances with the payment processing security group attached can connect\n- Port 5432 is PostgreSQL's default port (mentioned in the case study: \"RDS PostgreSQL\")\n- This implements the principle of least privilege at the network layer\n- Changes to instance membership are automatically reflected (add/remove instances from security group)\n\n**Scenario 4: Subnet-level defense**\n- **NACLs operate at the subnet boundary** and are evaluated before security groups\n- They are **stateless** (must configure both inbound and outbound rules)\n- Provide defense-in-depth: even if security group rules are misconfigured, NACLs provide a safety net\n- Can explicitly deny traffic from specific IP ranges or ports\n- Critical for PCI DSS requirement of network segmentation\n\n**Why not the other options:**\n\n- **Scenario 1 - NACL or WAF alone**: While NACLs can allow port 443, they're less flexible than security groups and require managing both inbound/outbound rules. WAF is an application layer control, not a network access control. \"Allow all from VPC CIDR\" would allow internal services but not the internet.\n\n- **Scenario 2 - NACL/Route table changes**: NACLs at the subnet level don't provide instance-specific protection. Removing IGW routes would break legitimate egress traffic. \"Allow from VPC CIDR\" is too broad and doesn't limit to just ALB traffic.\n\n- **Scenario 3 - NACL/IAM**: NACLs use CIDR ranges, not security groups, making management harder. IAM database authentication is for user-level auth, not network access control. VPC endpoints are for AWS service access, not RDS connections.\n\n- **Scenario 4 - Flow Logs/Network Firewall/PrivateLink**: Flow Logs are for monitoring, not enforcement. Network Firewall is powerful but costly and complex for basic tier isolation. PrivateLink is for service exposure, not general subnet security.",
+    "category": "Domain 1: Design Secure Architectures"
+}

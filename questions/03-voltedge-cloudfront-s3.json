@@ -1,0 +1,25 @@
+{
+    "id": "saa-c03-voltedge-cloudfront-s3",
+    "question": "VoltEdge Media needs to deliver 800 TB of video content with sub-200ms latency globally while ensuring content is protected from unauthorized access. What is the MOST cost-effective and secure solution?",
+    "caseStudy": "scenarios/case_study_voltedge_media.json",
+    "options": [
+        {
+            "text": "Store videos in Amazon S3 Standard storage class with public read access, use CloudFront with Geo Restriction to block unauthorized regions",
+            "correct": false
+        },
+        {
+            "text": "Store videos in Amazon S3 Standard storage class with bucket policies restricting access, use CloudFront with Origin Access Control (OAC) and signed URLs for authenticated access",
+            "correct": true
+        },
+        {
+            "text": "Store videos in Amazon S3 Glacier for cost savings, use CloudFront with Lambda@Edge to retrieve and deliver content on-demand",
+            "correct": false
+        },
+        {
+            "text": "Store videos in Amazon EFS mounted across multiple regions, use CloudFront with custom origin pointing to Application Load Balancers in each region",
+            "correct": false
+        }
+    ],
+    "explanation": "**S3 Standard with CloudFront OAC and signed URLs** is the optimal solution:\n\n**Storage layer (S3 Standard):**\n- **S3 Standard** provides the right balance of cost and performance for frequently accessed video content\n- **Private bucket**: Keeping the bucket private ensures content is only accessible through CloudFront, not directly from S3\n- **Cost-effective**: At $0.023/GB for the first 50 TB, this is reasonable for frequently accessed content\n\n**Content delivery (CloudFront):**\n- **Global edge network**: CloudFront's 400+ edge locations ensure sub-200ms latency in all major regions worldwide\n- **Origin Access Control (OAC)**: Restricts S3 bucket access to only CloudFront, preventing direct access to S3 objects. OAC is the modern replacement for Origin Access Identity (OAI)\n- **Signed URLs**: Provides secure, time-limited access to content based on user authentication. The application can generate signed URLs after verifying subscription status\n- **Caching**: CloudFront caches content at edge locations, reducing load on S3 and lowering data transfer costs\n\n**Security benefits:**\n- Content cannot be accessed by bypassing CloudFront\n- Signed URLs can include expiration times, IP restrictions, and custom policies\n- Integration with AWS WAF can protect against common web exploits\n\n**Why not the other options:**\n\n- **Option A (Public S3 bucket)**: Violates security requirements by allowing direct public access to all content. Anyone with the S3 URL could download videos without authentication. Geo restriction alone is insufficient protection.\n- **Option C (S3 Glacier)**: Glacier is for archival storage with retrieval times of minutes to hours, making it completely unsuitable for streaming video. Lambda@Edge cannot make Glacier practical for real-time delivery.\n- **Option D (EFS with ALB)**: EFS is designed for file system access from EC2 instances, not as an origin for content delivery. This architecture would be significantly more expensive and complex than S3, and wouldn't provide better performance. EFS also cannot span regions directly.",
+    "category": "Domain 3: Design High-Performing Architectures"
+}

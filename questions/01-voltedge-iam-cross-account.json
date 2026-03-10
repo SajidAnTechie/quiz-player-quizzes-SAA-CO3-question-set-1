@@ -1,0 +1,25 @@
+{
+    "id": "saa-c03-voltedge-iam-cross-account",
+    "question": "Based on VoltEdge Media's security requirements, the security team needs read-only access to audit the production AWS account's resources from their separate security account. Which solution provides secure cross-account access following the principle of least privilege?",
+    "caseStudy": "scenarios/case_study_voltedge_media.json",
+    "options": [
+        {
+            "text": "Create IAM users in the production account for each security team member and share the credentials via AWS Secrets Manager",
+            "correct": false
+        },
+        {
+            "text": "Create an IAM role in the production account with read-only permissions and establish a trust relationship with the security account, allowing security team members to assume the role",
+            "correct": true
+        },
+        {
+            "text": "Enable AWS Organizations and use Service Control Policies (SCPs) to grant the security account access to production resources",
+            "correct": false
+        },
+        {
+            "text": "Create an IAM group in the production account with read-only permissions and add the security team members' IAM users from the security account to this group",
+            "correct": false
+        }
+    ],
+    "explanation": "**Creating an IAM role with a cross-account trust relationship is the correct approach** for several reasons:\n\n- **Least privilege**: The role can be configured with read-only permissions (e.g., `ViewOnlyAccess` managed policy) and limited to only the resources needed for auditing\n- **No credential sharing**: Security team members use their existing credentials in the security account and assume the role temporarily, eliminating the need to manage separate credentials\n- **Auditability**: All assume-role actions are logged in CloudTrail, providing a clear audit trail of who accessed what and when\n- **Temporary credentials**: When assuming a role, temporary credentials are issued with a limited lifetime, reducing security risk\n\n**Why not the other options:**\n\n- **Option A (IAM users with shared credentials)**: Violates security best practices by requiring credential sharing and creates management overhead. Each user would need permanent credentials in the production account.\n- **Option C (SCPs)**: Service Control Policies are used to set permission guardrails across an organization, not to grant access. SCPs can only restrict permissions, not grant them.\n- **Option D (Cross-account IAM group membership)**: IAM groups cannot contain users from different AWS accounts. Each account maintains its own set of users and groups.",
+    "category": "Domain 1: Design Secure Architectures"
+}

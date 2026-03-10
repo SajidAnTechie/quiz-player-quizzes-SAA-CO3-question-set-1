@@ -1,0 +1,30 @@
+{
+    "id": "saa-c03-voltedge-multi-region-db",
+    "type": "multi",
+    "question": "VoltEdge Media needs to implement multi-region database deployment with automatic failover capability to support their expansion plans. The database must maintain read performance during peak traffic. Which TWO solutions should be implemented together? (Choose two.)",
+    "caseStudy": "scenarios/case_study_voltedge_media.json",
+    "options": [
+        {
+            "text": "Deploy Amazon RDS for PostgreSQL with Multi-AZ configuration in the primary region and enable automated backups with cross-region snapshot copying",
+            "correct": false
+        },
+        {
+            "text": "Use Amazon Aurora Global Database with the primary cluster in one region and read replicas in additional regions, providing sub-second replication latency",
+            "correct": true
+        },
+        {
+            "text": "Deploy Amazon Aurora read replicas in each region and use Route 53 weighted routing to distribute read traffic across regions",
+            "correct": true
+        },
+        {
+            "text": "Implement Amazon DynamoDB Global Tables with multi-region replication and configure the application to write to the local region",
+            "correct": false
+        },
+        {
+            "text": "Use Amazon RDS read replicas in multiple regions and manually promote a replica to primary during a regional failure",
+            "correct": false
+        }
+    ],
+    "explanation": "**Aurora Global Database with read replicas** provides the optimal solution for VoltEdge Media's requirements:\n\n**Aurora Global Database (Option B)** offers:\n- **Fast replication**: Data is replicated to secondary regions with typical latency of under one second\n- **Automatic failover**: In case of regional degradation, a secondary region can be promoted to primary with minimal data loss (RPO of 1 second)\n- **Disaster recovery**: Provides robust DR capability with minimal RTO (recovery time typically under 1 minute)\n- **PostgreSQL compatibility**: Maintains compatibility with their existing PostgreSQL database\n\n**Aurora read replicas (Option C)** complement the global database by:\n- **Scaling read capacity**: Up to 15 read replicas per region can handle the peak read traffic\n- **Low-latency local reads**: Each region can serve read queries from local replicas, achieving sub-200ms latency\n- **Route 53 integration**: Weighted routing can distribute read traffic based on capacity and performance\n\n**Why not the other options:**\n\n- **Option A (RDS Multi-AZ + cross-region snapshots)**: While Multi-AZ provides high availability within a region, cross-region snapshots don't provide automatic failover and would require manual recovery with significant RTO. This doesn't meet the requirement for automatic failover.\n- **Option D (DynamoDB Global Tables)**: Would require a complete database migration from PostgreSQL to DynamoDB's NoSQL model, involving significant application rewrites. While DynamoDB Global Tables offer excellent multi-region capabilities, the migration effort makes this impractical.\n- **Option E (RDS read replicas with manual promotion)**: Manual promotion doesn't meet the requirement for automatic failover and would result in longer recovery times during an incident.",
+    "category": "Domain 2: Design Resilient Architectures"
+}

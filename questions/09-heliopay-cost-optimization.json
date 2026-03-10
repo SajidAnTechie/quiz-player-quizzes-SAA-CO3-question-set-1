@@ -1,0 +1,43 @@
+{
+    "id": "saa-c03-heliopay-cost-optimization",
+    "type": "fill-blank",
+    "question": "HelioPay Financial needs to optimize costs while maintaining performance for their payment processing platform. Complete each statement by selecting the correct cost optimization strategy for their first year of operation with a $50,000/month budget.",
+    "caseStudy": "scenarios/case_study_heliopay_financial.json",
+    "blanks": [
+        {
+            "id": "blank-compute-commitment",
+            "label": "For the payment processing EC2 instances that run 24/7 with predictable baseline capacity, HelioPay should purchase ___ to reduce costs by up to 72% compared to On-Demand pricing.",
+            "options": [
+                "Compute Savings Plans with 1-year No Upfront commitment",
+                "EC2 Instance Savings Plans with 3-year All Upfront payment",
+                "Standard Reserved Instances in each Availability Zone",
+                "Spot Instances with Spot Fleet configuration"
+            ],
+            "correctIndex": 0
+        },
+        {
+            "id": "blank-database-commitment",
+            "label": "For the RDS PostgreSQL database that requires Multi-AZ deployment with consistent usage, the most cost-effective option is ___ .",
+            "options": [
+                "RDS Reserved Instances with 1-year term for the baseline capacity",
+                "Aurora Serverless v2 with automatic scaling",
+                "RDS on-demand instances with automated start/stop schedules",
+                "Database Savings Plans with 3-year commitment"
+            ],
+            "correctIndex": 0
+        },
+        {
+            "id": "blank-burst-capacity",
+            "label": "To handle traffic spikes beyond baseline capacity while minimizing costs, HelioPay should configure Auto Scaling to use ___ for additional capacity.",
+            "options": [
+                "On-Demand Instances as the default capacity type",
+                "Spot Instances with interruption handling",
+                "Reserved Instances purchased in advance",
+                "Dedicated Hosts for compliance requirements"
+            ],
+            "correctIndex": 0
+        }
+    ],
+    "explanation": "**Cost optimization for HelioPay's first year requires balancing commitment and flexibility:**\n\n**Blank 1: Compute Savings Plans with 1-year No Upfront**\n\n**Why Compute Savings Plans:**\n- **Flexibility**: Apply to any EC2 instance family, size, region, OS, or tenancy - critical for a startup that may adjust architecture\n- **Up to 72% savings**: Comparable to Reserved Instances but more flexible\n- **Covers baseline load**: Payment processing instances run 24/7, making consistent usage predictable\n- **1-year term**: Balances commitment with flexibility for a young company (versus 3-year which is too long for year 1)\n- **No upfront payment**: Preserves cash flow - important for a startup building infrastructure\n\n**Why not the others:**\n- **EC2 Instance Savings Plans (3-year All Upfront)**: Higher savings but less flexible (locked to instance family) and requires large upfront capital\n- **Standard Reserved Instances**: Less flexible than Savings Plans and must be purchased per-AZ\n- **Spot Instances**: Not suitable for 24/7 payment processing - interruptions would cause transaction failures\n\n**Blank 2: RDS Reserved Instances with 1-year term**\n\n**Why RDS Reserved Instances:**\n- **Significant savings**: Up to 60% compared to on-demand for consistent database usage\n- **Multi-AZ support**: RDS RIs apply to Multi-AZ deployments\n- **1-year term**: Matches compute commitment timeframe and provides flexibility\n- **Predictable workload**: Payment processing databases run continuously, making this predictable capacity\n- **Cost allocation**: RDS RIs can be easily tracked and allocated to the payment processing service\n\n**Why not the others:**\n- **Aurora Serverless v2**: While it auto-scales, it's more expensive than RDS with RI for continuous workloads. Better for variable usage.\n- **On-demand with start/stop**: Payment processing requires 24/7 availability - cannot stop the database\n- **Database Savings Plans**: Currently not offered by AWS (only Compute and SageMaker Savings Plans exist)\n\n**Blank 3: On-Demand Instances for burst capacity**\n\n**Why On-Demand for bursts:**\n- **Pay only for what you use**: No commitment needed for unpredictable spike capacity\n- **No interruption risk**: Critical for payment processing - Spot interruptions could cause transaction failures\n- **Auto Scaling compatibility**: Seamlessly integrates with Auto Scaling groups\n- **Cost control**: Bursts are temporary, so the higher On-Demand price has limited impact on overall costs\n- **Baseline covered by Savings Plans**: The savings on baseline capacity (likely 70-80% of total) offsets the On-Demand cost for spikes\n\n**Why not the others:**\n- **Spot Instances**: While 90% cheaper, Spot interruptions are unacceptable for payment processing. A terminated instance mid-transaction could cause payment failures, chargebacks, or data inconsistencies.\n- **Reserved Instances purchased in advance**: Cannot predict exact spike capacity needs; purchasing RIs for max capacity wastes money\n- **Dedicated Hosts**: Extremely expensive and unnecessary unless specific compliance or licensing requirements exist\n\n**Total cost optimization strategy:**\n\n1. **Baseline capacity (70% of usage)**: Covered by 1-year Compute Savings Plans and RDS RIs = 60-72% savings\n2. **Burst capacity (30% of usage)**: On-Demand instances during traffic spikes\n3. **Blended savings**: Approximately 45-50% overall cost reduction while maintaining flexibility\n4. **Within budget**: $50,000/month budget provides room for 5,000 requests/second with this model\n\n**First-year strategy rationale:**\n- Shorter commitments (1-year vs 3-year) allow architectural adjustments as the platform evolves\n- No upfront payment preserves capital for other startup needs\n- Avoiding Spot for payment processing prevents service disruptions\n- Can reassess and purchase longer-term commitments after establishing stable usage patterns",
+    "category": "Domain 4: Design Cost-Optimized Architectures"
+}

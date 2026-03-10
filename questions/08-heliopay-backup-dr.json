@@ -1,0 +1,29 @@
+{
+    "id": "saa-c03-heliopay-backup-dr",
+    "type": "matching",
+    "question": "HelioPay Financial needs to implement a disaster recovery strategy with RTO of 1 hour and RPO of 15 minutes. Match each component of their infrastructure to the MOST appropriate backup and DR strategy.",
+    "caseStudy": "scenarios/case_study_heliopay_financial.json",
+    "sourceItems": [
+        "Amazon RDS PostgreSQL database containing transaction records and payment state",
+        "EC2 instances running the payment processing engine with specific software configurations",
+        "ElastiCache Redis cluster storing session data and rate limiting counters",
+        "AWS Lambda functions delivering webhooks to merchant systems",
+        "Application secrets including database credentials and API keys stored in Secrets Manager"
+    ],
+    "targetSlots": [
+        "Automated snapshots every 15 minutes + cross-region replication",
+        "Golden AMI + infrastructure as code (CloudFormation/Terraform)",
+        "Lambda function versioning + cross-region deployment via CI/CD",
+        "Multi-AZ deployment only (ephemeral data acceptable to lose)",
+        "Automatic cross-region replication enabled by AWS service"
+    ],
+    "correctMapping": [
+        0,
+        1,
+        3,
+        2,
+        4
+    ],
+    "explanation": "**Each infrastructure component requires a different DR strategy based on criticality and recovery requirements:**\n\n**1. RDS PostgreSQL → Automated snapshots every 15 minutes + cross-region replication**\n- **RPO requirement**: 15 minutes means no more than 15 minutes of data loss is acceptable\n- **RDS automated backups** can be configured with backup retention and continuous transaction logs\n- **Cross-region snapshot copying** ensures the database can be restored in another region if primary region fails\n- **Point-in-time recovery (PITR)** allows restoration to any point within the backup retention period\n- This is critical for payment data which cannot be lost or recreated\n\n**2. EC2 instances → Golden AMI + infrastructure as code**\n- **Golden AMI** contains pre-configured software, security patches, and payment processing application\n- **Infrastructure as code** (CloudFormation or Terraform) can quickly recreate the entire EC2 fleet, Auto Scaling groups, and load balancers\n- **RTO requirement**: 1 hour allows time to launch instances from AMI in the DR region\n- **Version control** of IaC templates ensures consistent deployments\n- Using AMIs is faster than rebuilding instances from scratch during a disaster\n\n**3. ElastiCache Redis → Multi-AZ deployment only**\n- **Session data is ephemeral** - users can re-authenticate after a regional failure\n- **Rate limiting counters** can be reset without data loss concerns\n- **Multi-AZ** provides high availability within a region by automatic failover to standby nodes\n- **Cost-effective**: No need for cross-region replication of temporary data\n- Users might need to re-login and rate limits might reset, but this is acceptable for a regional disaster\n- Redis persistence and snapshots can be used, but cross-region replication adds complexity for data that's acceptable to lose\n\n**4. Lambda functions → Lambda function versioning + cross-region deployment**\n- **Lambda code** should be deployed to multiple regions via CI/CD pipeline\n- **Function versioning** allows rollback if deployment issues occur\n- **Quick recovery**: Lambda functions are stateless and can be invoked in any region immediately\n- **Infrastructure as code** (SAM, CDK, or Terraform) automates cross-region deployment\n- Webhook URLs can use Route 53 health checks to failover to the DR region\n\n**5. Secrets Manager → Automatic cross-region replication**\n- **Secrets Manager** has built-in support for replicating secrets to multiple regions\n- **Automatic rotation** continues to work in replica regions\n- **Critical for recovery**: Database credentials and API keys are needed immediately when failing over to DR region\n- **Seamless failover**: Applications in the DR region can access secrets immediately\n- **Encryption**: Secrets are encrypted with KMS keys in each region\n\n**Why this mapping is optimal:**\n- **Database snapshots** ensure compliance with RPO requirement for critical payment data\n- **AMI strategy** balances RTO requirement with cost-effectiveness for compute resources\n- **Multi-AZ for cache** acknowledges that temporary data doesn't require cross-region DR\n- **Lambda cross-region deployment** leverages the serverless nature for fast recovery\n- **Secrets replication** is automatic and ensures security credentials are available during failover\n\n**RTO/RPO achievement:**\n- **RPO 15 minutes**: Met by RDS snapshots and transaction log backups\n- **RTO 1 hour**: Sufficient time to launch EC2 instances from AMI, promote RDS replica or restore from snapshot, and redirect traffic to DR region using Route 53",
+    "category": "Domain 2: Design Resilient Architectures"
+}

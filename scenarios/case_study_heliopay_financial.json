@@ -1,0 +1,17 @@
+{
+    "id": "case_study_heliopay_financial",
+    "tabs": [
+        {
+            "title": "Company Overview",
+            "content": "**HelioPay Financial** is a fintech startup building a next-generation payment processing platform for small and medium-sized businesses. The platform enables merchants to accept credit cards, digital wallets, and ACH transfers through a unified API.\n\nThe company is in the process of obtaining Payment Card Industry Data Security Standard (PCI DSS) Level 1 certification and expects to process $500 million in transactions annually within the first year of operation. HelioPay is building its infrastructure entirely on AWS to leverage cloud security controls and achieve rapid time-to-market.\n\nThe founding team includes experienced engineers from major payment processors, and they are committed to building a highly secure, compliant, and resilient platform from day one."
+        },
+        {
+            "title": "Planned Architecture",
+            "content": "**Application Components:**\n- **Public-facing API**: RESTful payment processing API accessible to merchant applications\n- **Admin Dashboard**: Web application for merchant account management and reporting\n- **Payment Processing Engine**: Core transaction processing, fraud detection, and settlement logic\n- **Webhook Service**: Sends real-time payment notifications to merchant systems\n- **Data Warehouse**: Stores transaction history and analytics data\n\n**Infrastructure Design:**\n- Multi-tier VPC architecture with public, private, and database subnets\n- Application Load Balancers in public subnets\n- EC2 instances for API and processing logic in private subnets\n- Amazon RDS for transactional data (PostgreSQL Multi-AZ)\n- Amazon Redshift for analytics and reporting\n- AWS Lambda for webhook delivery\n- ElastiCache for session management and rate limiting\n\n**Expected Traffic:**\n- 5,000 API requests per second at launch\n- Sub-500ms p99 latency requirement\n- 99.99% availability requirement (< 53 minutes downtime per year)"
+        },
+        {
+            "title": "Requirements",
+            "content": "**Security Requirements (PCI DSS Compliance):**\n- Network segmentation isolating cardholder data environment (CDE) from other systems\n- All payment data must be encrypted in transit and at rest\n- Implement principle of least privilege for all IAM roles and security groups\n- Enable detailed logging of all access to payment data\n- Deploy intrusion detection/prevention systems\n- Implement DDoS protection for public endpoints\n- Regular vulnerability scanning and penetration testing\n- Multi-factor authentication for all administrative access\n\n**Reliability Requirements:**\n- Implement disaster recovery plan with RTO of 1 hour and RPO of 15 minutes\n- Automated backups of all critical data with point-in-time recovery\n- Geographic redundancy for payment processing (active-passive multi-region)\n- Self-healing infrastructure that automatically replaces failed components\n- Ability to perform zero-downtime deployments\n\n**Cost Requirements:**\n- Total infrastructure cost not to exceed $50,000/month in year 1\n- Optimize compute costs using appropriate instance types and pricing models\n- Implement cost allocation tags for different business units\n- Forecast costs for 2x and 5x traffic growth scenarios\n- Achieve at least 40% cost savings compared to on-premises alternative"
+        }
+    ]
+}

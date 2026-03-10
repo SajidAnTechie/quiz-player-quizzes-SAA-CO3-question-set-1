@@ -1,0 +1,25 @@
+{
+    "id": "saa-c03-brightforge-asg-elb",
+    "question": "BrightForge Analytics needs to scale their Node.js API tier to handle 5x current load while maintaining high availability. The current setup uses t3.xlarge instances that average 65% CPU utilization with peaks at 92%. What is the BEST Auto Scaling configuration?",
+    "caseStudy": "scenarios/case_study_brightforge_analytics.json",
+    "options": [
+        {
+            "text": "Configure target tracking scaling policy based on CPU utilization with target of 70%, use t3.xlarge instances, set minimum capacity to 10 instances across 3 Availability Zones",
+            "correct": true
+        },
+        {
+            "text": "Configure step scaling policy that adds 5 instances when CPU exceeds 80% and removes 5 instances when CPU drops below 40%, use t3.2xlarge instances for better performance",
+            "correct": false
+        },
+        {
+            "text": "Configure scheduled scaling to increase capacity during business hours (8 AM - 6 PM) and decrease capacity during off-hours, use simple scaling policy for unexpected spikes",
+            "correct": false
+        },
+        {
+            "text": "Configure predictive scaling based on historical traffic patterns with 24-hour prediction horizon, use mixed instance types policy to reduce costs",
+            "correct": false
+        }
+    ],
+    "explanation": "**Target tracking scaling with 70% CPU target** is the optimal configuration:\n\n**Why this approach works:**\n\n**Target tracking policy:**\n- **Simple to configure and maintain**: Automatically creates CloudWatch alarms and adjusts capacity to maintain the target metric\n- **70% target**: Provides ~30% headroom for traffic spikes while maintaining cost efficiency. Current peaks at 92% indicate the system needs more headroom\n- **Responsive**: Reacts quickly to both scale-out and scale-in events based on actual demand\n- **Gradual scaling**: Adds/removes capacity incrementally rather than in large steps, preventing over-provisioning\n\n**Instance sizing (t3.xlarge):**\n- Current instances are appropriately sized (65% average utilization)\n- Scaling horizontally with more instances rather than vertically with larger instances provides better fault tolerance\n- Distributing load across more smaller instances improves resilience\n\n**Minimum capacity (10 instances across 3 AZs):**\n- Ensures at least 3-4 instances per AZ for high availability\n- If one AZ fails, remaining capacity can handle current average load\n- Supports the 99.9% uptime SLA requirement\n\n**Why not the other options:**\n\n- **Option B (Step scaling with larger instances)**: Step scaling adds/removes fixed numbers of instances which can lead to over-provisioning or under-provisioning. Adding 5 instances at once might be excessive for gradual load increases. Using t3.2xlarge instances (vertical scaling) is more expensive and provides less fault tolerance than horizontal scaling with more smaller instances. The large step size could result in 50%+ capacity changes which is inefficient.\n\n- **Option C (Scheduled scaling)**: BrightForge's traffic doesn't follow a simple daily pattern - they experience variable load based on customer analysis activities, with particular spikes during end-of-quarter. Scheduled scaling assumes predictable patterns and would not adapt well to unexpected demand. Simple scaling policies are less sophisticated than target tracking and can cause thrashing (rapid scale up/down cycles).\n\n- **Option D (Predictive scaling)**: While predictive scaling can be useful, it's most effective when you have stable, repeating traffic patterns. BrightForge's traffic varies based on customer behavior (quarterly analysis periods) rather than following consistent daily/weekly patterns. Additionally, predictive scaling should complement, not replace, dynamic scaling policies. Mixed instance types add complexity without clear benefit given their current homogeneous workload.",
+    "category": "Domain 2: Design Resilient Architectures"
+}

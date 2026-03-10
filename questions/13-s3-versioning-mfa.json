@@ -1,0 +1,29 @@
+{
+    "id": "saa-c03-s3-versioning-mfa",
+    "type": "multi",
+    "question": "A company stores critical financial data in an S3 bucket and must protect against accidental deletion and ensure compliance with regulations requiring immutable audit trails. Which TWO features should be enabled? (Choose two.)",
+    "options": [
+        {
+            "text": "Enable S3 Versioning to retain all versions of objects, including deleted objects",
+            "correct": true
+        },
+        {
+            "text": "Enable S3 Object Lock in compliance mode with a retention period to prevent deletion of object versions",
+            "correct": true
+        },
+        {
+            "text": "Enable MFA Delete to require multi-factor authentication for permanent object deletion",
+            "correct": false
+        },
+        {
+            "text": "Enable S3 Cross-Region Replication with Delete Marker Replication",
+            "correct": false
+        },
+        {
+            "text": "Configure S3 bucket policies to deny all DeleteObject API calls",
+            "correct": false
+        }
+    ],
+    "explanation": "**S3 Versioning and Object Lock in compliance mode** provide the strongest protection:\n\n**S3 Versioning (Option A):**\n- **Retains all versions**: Every modification creates a new version; old versions are preserved\n- **Protects against deletion**: Delete operations insert a delete marker but don't remove versions\n- **Recovery capability**: Previous versions can be restored at any time\n- **Audit trail foundation**: Provides history of all changes to objects\n- **Required for Object Lock**: Versioning must be enabled before Object Lock can be configured\n\n**S3 Object Lock - Compliance Mode (Option B):**\n- **Immutability**: Once set, retention periods cannot be shortened and objects cannot be deleted by anyone, including the root account\n- **Regulatory compliance**: Meets requirements for WORM (Write Once Read Many) storage like SEC Rule 17a-4, FINRA, and HIPAA\n- **Fixed retention period**: Objects are protected for a specified time (days or years)\n- **Legal hold option**: Can also place indefinite legal holds on objects\n- **No override**: Unlike governance mode, compliance mode retention cannot be removed\n\n**Why these work together:**\n- Versioning preserves all object versions\n- Object Lock makes those versions immutable for the retention period\n- Combined: Creates an unbreakable audit trail that satisfies strict compliance requirements\n\n**Why not the other options:**\n\n- **Option C (MFA Delete)**: While MFA Delete adds security by requiring multi-factor authentication to permanently delete versions or disable versioning, it alone doesn't prevent deletion - it just makes it harder. Object Lock in compliance mode is stronger because it makes deletion impossible during the retention period, even with MFA. MFA Delete is useful but secondary to Object Lock for true immutability.\n\n- **Option D (Cross-Region Replication)**: CRR provides disaster recovery by copying objects to another region, but it doesn't prevent deletion in the primary bucket. If an object is deleted from the source (even accidentally), the delete marker can replicate to the destination. CRR is valuable for resilience but doesn't create immutable audit trails.\n\n- **Option E (Bucket policy denying DeleteObject)**: Bucket policies can be changed by anyone with sufficient permissions (IAM admin, root account). This doesn't meet compliance requirements for immutability because the policy itself can be modified. Object Lock in compliance mode is superior because even the root account cannot override it.",
+    "category": "Domain 1: Design Secure Architectures"
+}

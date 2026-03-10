@@ -1,0 +1,17 @@
+{
+    "id": "case_study_terrasync_logistics",
+    "tabs": [
+        {
+            "title": "Company Overview",
+            "content": "**TerraSync Logistics** is a 15-year-old supply chain management company operating a cloud-based platform that tracks shipments, manages warehouse inventory, and optimizes delivery routes for over 2,000 logistics partners worldwide.\n\nThe platform currently runs on aging infrastructure with a mix of AWS services and legacy on-premises systems. TerraSync is undertaking a modernization initiative to migrate remaining on-premises workloads to AWS, adopt serverless architectures where appropriate, and implement cost optimization strategies.\n\nThe company processes 3 million shipment tracking events daily, stores 10 years of historical shipment data (approximately 200 TB), and provides real-time visibility to supply chain stakeholders through web and mobile applications."
+        },
+        {
+            "title": "Current Environment",
+            "content": "**AWS Resources:**\n- EC2-based web application tier (50 m5.large instances in Auto Scaling groups)\n- Amazon RDS MySQL database (db.r5.8xlarge) for active shipment data\n- Amazon S3 for document storage (shipping labels, POD images, invoices)\n- On-premises data center with 30 TB of archived shipment data\n- VPN connection between on-premises network and AWS VPC\n\n**Application Characteristics:**\n- Web application: 500,000 page views per day\n- REST API: 2 million requests per day\n- Batch processing: Nightly ETL jobs processing previous day's events\n- Mobile API: Real-time shipment tracking updates\n- Reporting: Ad-hoc queries on historical data (10 years)\n\n**Pain Points:**\n- High monthly costs: $85,000 for EC2 and RDS alone\n- S3 storage costs growing 15% monthly due to document retention requirements\n- Slow response times for historical data queries\n- Idle compute resources during off-peak hours (nights and weekends)\n- Maintenance overhead for EC2 fleet patching and scaling"
+        },
+        {
+            "title": "Modernization Goals",
+            "content": "**Technical Goals:**\n- Migrate 30 TB of archived data from on-premises to AWS\n- Implement serverless architecture for infrequently accessed API endpoints\n- Reduce S3 storage costs by implementing intelligent lifecycle policies\n- Improve historical query performance using appropriate AWS analytics services\n- Decommission on-premises data center (target: 6 months)\n- Establish network connectivity between AWS VPCs in US, EU, and Asia regions\n\n**Cost Optimization Goals:**\n- Reduce overall AWS spending by 35% within 12 months\n- Right-size EC2 instances based on actual utilization patterns\n- Optimize S3 storage costs through lifecycle policies (estimated savings: $15,000/month)\n- Evaluate Savings Plans and Reserved Instances for predictable workloads\n- Implement automated start/stop schedules for non-production environments\n\n**Architecture Goals:**\n- Adopt API Gateway + Lambda for new API endpoints to reduce operational overhead\n- Migrate nightly batch jobs to serverless processing (Lambda, Step Functions)\n- Implement CloudFront for global content delivery and reduced origin load\n- Establish hub-and-spoke network topology connecting regional VPCs\n- Move from VPN to Direct Connect for consistent network performance"
+        }
+    ]
+}
